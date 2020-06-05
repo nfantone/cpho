@@ -16,6 +16,15 @@ npm i --production
 
 # Run test command
 ./bin/cpho.js --version
+1.0.0
+```
+
+Alternatively, using `npx`:
+
+```sh
+npx https://github.com/nfantone/cpho --version
+npx: installed 87 in 7.784s
+1.0.0
 ```
 
 ## Requirements
