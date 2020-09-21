@@ -43,21 +43,24 @@ Commands:
   cpho.js upload  uploads e-workers allowance for all weekdays in a given month + year
 
 Options:
-  --help             Show help                                         [boolean]
-  --url              Base Contracting Plus URL
+      --help            Show help                                      [boolean]
+      --url             Base Contracting Plus URL
                              [string] [default: "https://mycontractingplus.com"]
-  -u, --username     Contracting Plus username                          [string]
-  -p, --password     Contracting Plus password                          [string]
-  -d, --description  Contracting Plus allowance entry description
+  -u, --username        Contracting Plus username                       [string]
+  -p, --password        Contracting Plus password                       [string]
+  -d, --description     Contracting Plus allowance entry description
                                               [string] [default: "Pragmars LLC"]
-  --hs, --hours      Contracting Plus allowance entry hours[number] [default: 8]
-  --min, --minutes   Contracting Plus allowance entry minutes           [number]
-  -m, --month        Index of month to upload allowance for (beginning with 0
-                     for January to 11 for December)       [number] [default: 5]
-  -y, --year         Year to upload allowance for       [number] [default: 2020]
-  -t, --throttle     Number of milliseconds to wait between allowance uploads
+      --hs, --hours     Contracting Plus allowance entry hours
+                                                           [number] [default: 8]
+      --min, --minutes  Contracting Plus allowance entry minutes        [number]
+  -m, --month           Index of month to upload allowance for (beginning with 0
+                        for January to 11 for December)    [number] [default: 8]
+  -y, --year            Year to upload allowance for    [number] [default: 2020]
+  -t, --throttle        Number of milliseconds to wait between allowance uploads
                                                          [number] [default: 500]
-  --version          Show version number                               [boolean]
+  -x, --exclude         If specified, an allowance will not be uploaded for
+                        these working days                 [array] [default: []]
+      --version         Show version number                            [boolean]
 ```
 
 ### Usage
