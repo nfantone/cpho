@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 'use strict';
-const { isNil } = require('ramda');
+const { isEmpty, isNil, join, map } = require('ramda');
 const { EOL } = require('os');
 const ms = require('ms');
 const util = require('util');
@@ -15,6 +15,7 @@ const pck = require('../package.json');
 const login = require('../src/cplus-login');
 const homeoffice = require('../src/cplus-homeoffice');
 const eachWeekdayOfMonth = require('../src/each-business-days-month');
+const removeSameDays = require('../src/remove-same-days');
 
 /**
  * Prompts the user to enter username and a hidden password unless it
@@ -35,7 +36,7 @@ async function promptCredentialsIfNeeded(argv) {
       required: true,
       type: 'string',
       pattern: /^.+@.+$/,
-      message: 'username is required',
+      message: 'username is required and must be an email',
       description: chalk`enter contracting plus {bold username}`
     },
     {
@@ -73,15 +74,50 @@ function sleep(ms) {
   });
 }
 
-async function uploadBusinessDaysAllowance(argv, phpSessId, date) {
+function eachExcludedDate(year, month, days) {
+  return map(day => new Date(year, month, day), days);
+}
+
+const asLongDate = date => formatDate(date, 'E, MMM do, yyyy');
+
+async function uploadBusinessDaysAllowance(argv, phpSessId) {
   const shouldThrottle = isNil(argv.throttle) && argv.throttle > 0;
 
-  for (const day of eachWeekdayOfMonth(date)) {
+  // First day of the month/year to process allowance for as required
+  // by `--month` (or `-m`) and `--year` (or `-y`)
+  const currentDate = new Date(argv.year, argv.month);
+
+  // A list of all days for which an allowance should not be uploaded
+  // as supplied by the `--exclude` or `-x` option (e.g.: `-x 12 20 21` will ignore days
+  // 12, 20 and 21 of the month)
+  const excludedDates = eachExcludedDate(argv.year, argv.month, argv.exclude);
+
+  // A list of all working days in the month (i.e.: every day minus weekends)
+  const workingDatesOfMonth = eachWeekdayOfMonth(currentDate);
+
+  // The final list of dates for which a home office allowance should be uploaded
+  // (i.e.: all working days minus excluded days)
+  const allowanceDates = removeSameDays(workingDatesOfMonth, excludedDates);
+
+  console.info(
+    chalk`{green.bold info} home office allowance will be uploaded for a total of {bold ${allowanceDates.length} days}`
+  );
+
+  if (!isEmpty(excludedDates)) {
+    console.warn(
+      chalk`{yellow.bold warn} excluding dates {bold ${join(
+        ' / ',
+        map(asLongDate, excludedDates)
+      )}}`
+    );
+  }
+
+  for (const date of allowanceDates) {
     await show(
-      chalk`{green.bold info} uploading allowance for {bold ${formatDate(day, 'E, MMM do, yyyy')}}`,
+      chalk`{green.bold info} uploading allowance for {bold ${asLongDate(date)}}`,
       async () => {
         await homeoffice(argv.url, phpSessId, {
-          date: day,
+          date,
           description: argv.description,
           hours: argv.hours,
           minutes: argv.minutes
@@ -105,12 +141,14 @@ async function upload(yargs) {
     const startTime = Date.now();
 
     const phpSessId = await login(argv.url, username, password);
+
+    console.info(chalk`{cyan.bold cpho} {gray.bold v${pck.version} - ${pck.license}}`);
+
     console.info(
       chalk`{green.bold info} logged in to {underline ${argv.url}} as ${username} (PHPSESSID ${phpSessId})`
     );
 
-    const allowanceDate = new Date(argv.year, argv.month);
-    await uploadBusinessDaysAllowance(argv, phpSessId, allowanceDate);
+    await uploadBusinessDaysAllowance(argv, phpSessId);
     console.info(`all done ${ms(Date.now() - startTime)}`);
   } catch (err) {
     if (/cancell?ed/i.test(err.message)) {
@@ -175,6 +213,12 @@ yargs
     alias: 'throttle',
     default: 500,
     describe: 'Number of milliseconds to wait between allowance uploads'
+  })
+  .option('x', {
+    array: true,
+    alias: 'exclude',
+    default: [],
+    describe: 'If specified, an allowance will not be uploaded for these working days'
   })
   .command('upload', 'uploads e-workers allowance for all weekdays in a given month + year', upload)
   .demandCommand()

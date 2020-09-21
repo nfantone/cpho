@@ -1,8 +1,4 @@
 {
-  "src/**/*.js": [
-    "prettier --write",
-    "eslint --fix",
-    "jest -o --passWithNoTests --env=node --colors --bail --detectOpenHandles --errorOnDeprecated --noStackTrace"
-  ],
+  "src/**/*.js": ["prettier --write", "eslint --fix"],
   "src/**/*.json": ["prettier --write"]
 }
