@@ -24,7 +24,7 @@ jobs:
       - run: npm ci
       - run: npm test
 
-  eslint:
+  lint:
     name: eslint
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +36,7 @@ jobs:
           level: error
           eslint_flags: packages/
 
-  misspell:
+  spelling:
     name: misspell
     runs-on: ubuntu-latest
     steps:

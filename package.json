@@ -1,6 +1,6 @@
 {
   "name": "cpho",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "A simple CLI tool to upload E-Workers Allowance timesheets to ContractingPlus",
   "keywords": [
     "tool",
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:nfantone/cpho.git"
+    "url": "https://github.com/nfantone/cpho.git"
   },
   "license": "MIT",
   "author": "Nicolás Fantone <me@nfantone.dev> (https://github.com/nfantone)",

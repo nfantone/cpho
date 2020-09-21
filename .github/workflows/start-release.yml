@@ -1,0 +1,20 @@
+name: Start release
+on: [workflow_dispatch]
+
+jobs:
+  start-releasee:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: merge develop -> master
+        uses: devmasx/merge-branch@v1.3.0
+        with:
+          type: now
+          from_branch: develop
+          target_branch: master
+          github_token: ${{ secrets.GH_TOKEN }}
+        # Pushing to `master` will trigger `release` job below
+        run: git push origin master
