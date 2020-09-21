@@ -5,8 +5,10 @@ jobs:
   start-releasee:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout master
+        uses: actions/checkout@v2
         with:
+          ref: master
           persist-credentials: false
 
       - name: merge develop -> master
@@ -16,5 +18,7 @@ jobs:
           from_branch: develop
           target_branch: master
           github_token: ${{ secrets.GH_TOKEN }}
-        # Pushing to `master` will trigger `release` job below
+
+      # Pushing to `master` will trigger `release` job below
+      - name: push master
         run: git push origin master

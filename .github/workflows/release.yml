@@ -13,17 +13,21 @@ jobs:
     name: semantic release
     runs-on: ubuntu-18.04
     steps:
+      - name: checkout master
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
           persist-credentials: false
+
       - name: setup nodejs
         uses: actions/setup-node@v1
         with:
           node-version: 12
+
       - name: install dependencies
         run: npm ci
-      - name: release
+
+      - name: run sematic-release
         env:
           GIT_AUTHOR_NAME: 'Nicolás Fantone'
           GIT_AUTHOR_EMAIL: 'nfantone@gmail.com'
