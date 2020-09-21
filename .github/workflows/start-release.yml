@@ -5,19 +5,18 @@ jobs:
   start-releasee:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout develop
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+
       - name: checkout master
         uses: actions/checkout@v2
         with:
           ref: master
-          persist-credentials: false
 
       - name: merge develop -> master
-        uses: devmasx/merge-branch@v1.3.0
-        with:
-          type: now
-          from_branch: develop
-          target_branch: master
-          github_token: ${{ secrets.GH_TOKEN }}
+        run: git merge develop
 
       # Pushing to `master` will trigger `release` job below
       - name: push master
