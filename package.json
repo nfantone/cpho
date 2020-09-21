@@ -1,5 +1,5 @@
 {
-  "name": "cpho",
+  "name": "@nfantone/cpho",
   "version": "0.0.0-development",
   "description": "A simple CLI tool to upload E-Workers Allowance timesheets to ContractingPlus",
   "keywords": [
@@ -20,6 +20,11 @@
   "author": "Nicolás Fantone <me@nfantone.dev> (https://github.com/nfantone)",
   "main": "index.js",
   "bin": "./bin/cpho.js",
+  "files": [
+    "src/",
+    "bin/",
+    "index.js"
+  ],
   "scripts": {
     "test": "jest --env=node --colors --bail --detectOpenHandles --errorOnDeprecated --noStackTrace --passWithNoTests src/"
   },
@@ -64,6 +69,6 @@
     "prettier": "^2.1.2"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "registry": "https://npm.pkg.github.com"
   }
 }
