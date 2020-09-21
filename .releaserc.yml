@@ -1,7 +1,7 @@
 ---
 # `semantic-release` configuration and plugins setup
 # https://github.com/semantic-release/semantic-release
-branches: master
+branches: main
 tagFormat: '${version}'
 plugins:
   - - '@semantic-release/commit-analyzer'
