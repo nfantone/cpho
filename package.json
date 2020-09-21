@@ -1,6 +1,6 @@
 {
   "name": "@nfantone/cpho",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "description": "A simple CLI tool to upload E-Workers Allowance timesheets to ContractingPlus",
   "keywords": [
     "tool",
