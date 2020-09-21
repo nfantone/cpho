@@ -2,7 +2,7 @@ name: Start release
 on: [workflow_dispatch]
 
 jobs:
-  start-releasee:
+  start-release:
     runs-on: ubuntu-latest
     steps:
       - name: checkout develop
@@ -11,9 +11,9 @@ jobs:
           ref: develop
 
       - name: checkout master
-        uses: actions/checkout@v2
-        with:
-          ref: master
+        run: |
+          git fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin master
+          git checkout --progress --force -B master refs/remotes/origin/master
 
       - name: merge develop -> master
         run: git merge develop
